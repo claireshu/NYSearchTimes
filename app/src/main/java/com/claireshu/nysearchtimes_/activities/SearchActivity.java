@@ -3,18 +3,19 @@ package com.claireshu.nysearchtimes_.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 
-import com.claireshu.nysearchtimes_.ArticleActivity;
 import com.claireshu.nysearchtimes_.Article;
+import com.claireshu.nysearchtimes_.ArticleActivity;
 import com.claireshu.nysearchtimes_.ArticleArrayAdapter;
 import com.claireshu.nysearchtimes_.R;
 import com.loopj.android.http.AsyncHttpClient;
@@ -36,6 +37,7 @@ public class SearchActivity extends AppCompatActivity {
 
     ArrayList<Article> articles;
     ArticleArrayAdapter adapter;
+    RecyclerView rvArticles;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +45,7 @@ public class SearchActivity extends AppCompatActivity {
         setContentView(R.layout.activity_search);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
 
         setUpViews();
     }
@@ -71,26 +74,45 @@ public class SearchActivity extends AppCompatActivity {
 
     private void setUpViews() {
         etQuery = (EditText) findViewById(R.id.etQuery);
-        gvResults = (GridView) findViewById(R.id.gvResults);
         btnSearch = (Button) findViewById(R.id.btnSearch);
+
+        rvArticles = (RecyclerView) findViewById(R.id.rvArticles);
         articles = new ArrayList<>();
         adapter = new ArticleArrayAdapter(this, articles);
-        gvResults.setAdapter(adapter);
+        rvArticles.setAdapter(adapter);
 
-        // hook up listener for grid click
-        gvResults.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                // create an intent to display the article
-                Intent i = new Intent(getApplicationContext(), ArticleActivity.class);
-                // get the article to display
-                Article article = articles.get(position);
-                // pass in that article into intent
-                i.putExtra("article", article);
-                // launch the activity
-                startActivity(i);
-            }
-        });
+        StaggeredGridLayoutManager gridLayoutManager = new StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL);
+        rvArticles.setLayoutManager(gridLayoutManager);
+
+        ItemClickSupport.addTo(rvArticles).setOnItemClickListener(
+                new ItemClickSupport.OnItemClickListener() {
+                    @Override
+                    public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                        //create an intent to display the article
+                        Intent i = new Intent(getApplicationContext(), ArticleActivity.class);
+                        // get the article to display
+                        Article article = articles.get(position);
+                        // pass in that article into intent
+                        i.putExtra("article", article);
+                        // launch the activity
+                        startActivity(i);
+                    }
+                }
+        );
+//        // hook up listener for grid click
+//        rvArticles.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                // create an intent to display the article
+//                Intent i = new Intent(getApplicationContext(), ArticleActivity.class);
+//                // get the article to display
+//                Article article = articles.get(position);
+//                // pass in that article into intent
+//                i.putExtra("article", article);
+//                // launch the activity
+//                startActivity(i);
+//            }
+//        });
 
     }
     public void onArticleSearch(View view) {
@@ -112,9 +134,16 @@ public class SearchActivity extends AppCompatActivity {
 
                 try {
                     articleJsonResults = response.getJSONObject("response").getJSONArray("docs");
-//                  articles.addAll(Article.fromJSONArray(articleJsonResults));
+
+                    int curSize = adapter.getItemCount();
+
+                    ArrayList<Article> newArticles = Article.fromJSONArray(articleJsonResults);
+
+                    articles.addAll(newArticles);
+
+                    adapter.notifyItemRangeInserted(curSize, newArticles.size());
 //                  adapter.notifyDataSetChanged();
-                    adapter.addAll(Article.fromJSONArray(articleJsonResults));
+//                  adapter.addAll(Article.fromJSONArray(articleJsonResults));
                     Log.d("DEBUG", articles.toString());
                 } catch (JSONException e){
 
