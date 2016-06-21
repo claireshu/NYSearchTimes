@@ -32,6 +32,9 @@ public class ArticleActivity extends AppCompatActivity {
         });
         webView.loadUrl(article.getWebUrl());
 
+        //Spinner spinner = (Spinner) findViewById(R.id.spinner_news_desk);
+
+
 
     }
 
@@ -41,6 +44,10 @@ public class ArticleActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_share, menu);
         // Locate MenuItem with ShareActionProvider
         MenuItem item = menu.findItem(R.id.menu_item_share);
+
+//        miShareAction = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
+//        // Return true to display menu
+//        return true;
 
         miShareAction = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
@@ -53,5 +60,7 @@ public class ArticleActivity extends AppCompatActivity {
 
         miShareAction.setShareIntent(shareIntent);
         return super.onCreateOptionsMenu(menu);
+
+
     }
 }

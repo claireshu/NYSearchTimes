@@ -17,6 +17,7 @@ import android.view.View;
 import com.claireshu.nysearchtimes_.Article;
 import com.claireshu.nysearchtimes_.ArticleActivity;
 import com.claireshu.nysearchtimes_.ArticleArrayAdapter;
+import com.claireshu.nysearchtimes_.FilterActivity;
 import com.claireshu.nysearchtimes_.R;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -172,5 +173,25 @@ public class SearchActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private final int REQUEST_CODE = 20;
+
+    public void onFilter(MenuItem item) {
+        Intent intent = new Intent(SearchActivity.this, FilterActivity.class);
+        startActivityForResult(intent, REQUEST_CODE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
+            String newsDesk= data.getStringExtra("news_desk");
+            String sort = data.getStringExtra("sort");
+            String date = data.getStringExtra("date");
+
+
+        } else {
+            // error handling
+        }
     }
 }

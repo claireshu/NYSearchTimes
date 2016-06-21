@@ -15,4 +15,11 @@
         app:showAsAction="ifRoom|collapseActionView"
         app:actionViewClass="android.support.v7.widget.SearchView" />
 
+    <item android:id="@+id/action_filters"
+        android:orderInCategory="6"
+        android:title="Filters"
+        android:icon="@drawable/ic_menu_filter"
+        android:onClick="onFilter"
+        app:showAsAction="ifRoom|collapseActionView" />
+
 </menu>
