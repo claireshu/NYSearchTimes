@@ -122,6 +122,7 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     private void search(final String query) {
+        rvArticles.clearOnScrollListeners();
         rvArticles.addOnScrollListener(new EndlessRecyclerViewScrollListener(gridLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
@@ -153,18 +154,17 @@ public class SearchActivity extends AppCompatActivity {
                 try {
                     articleJsonResults = response.getJSONObject("response").getJSONArray("docs");
 
-                    int curSize = adapter.getItemCount();
+                    //int curSize = adapter.getItemCount();
 
                     ArrayList<Article> newArticles = Article.fromJSONArray(articleJsonResults);
 
                     if (page == 0) {
                         articles.clear();
-                        adapter.notifyDataSetChanged();
                     }
 
                     articles.addAll(newArticles);
-
-                    adapter.notifyItemRangeInserted(curSize, articles.size() - 1);
+                    adapter.notifyDataSetChanged();
+                    //adapter.notifyItemRangeInserted(0, articles.size() - 1);
 
                     Log.d("DEBUG", articles.toString());
                 } catch (JSONException e){
