@@ -2,10 +2,13 @@ package com.claireshu.nysearchtimes_;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.webkit.WebView;
@@ -22,6 +25,14 @@ public class ArticleActivity extends AppCompatActivity {
         setContentView(R.layout.activity_article);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        SpannableString s = new SpannableString("NYTimesSearch");
+        com.claireshu.nysearchtimes_.TypefaceSpan typeface = new com.claireshu.nysearchtimes_.TypefaceSpan(this, "sourcesanspro.otf");
+        s.setSpan(typeface, 0, s.length(),
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        getSupportActionBar().setTitle(s);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Article article = (Article) Parcels.unwrap(getIntent().getParcelableExtra("article"));
 
@@ -61,5 +72,18 @@ public class ArticleActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
 
 
+    }
+
+    // handles when the back arrow is pressed to go back to home page
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                // overridePendingTransition(R.animator.anim_left, R.animator.anim_right);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

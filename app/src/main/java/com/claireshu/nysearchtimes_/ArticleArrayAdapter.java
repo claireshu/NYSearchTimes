@@ -1,6 +1,7 @@
 package com.claireshu.nysearchtimes_;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -9,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 
 import java.util.List;
 
@@ -21,6 +22,7 @@ public class ArticleArrayAdapter extends RecyclerView.Adapter<ArticleArrayAdapte
 //    public ArticleArrayAdapter(Context context, List<Article> articles) {
 //        super(context, android.R.layout.simple_list_item_1,articles);
 //    }
+    Typeface font;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public ImageView ivImage;
@@ -39,6 +41,7 @@ public class ArticleArrayAdapter extends RecyclerView.Adapter<ArticleArrayAdapte
 
     public ArticleArrayAdapter(Context context, List<Article> articles) {
         mArticles = articles;
+        font = Typeface.createFromAsset(context.getAssets(), "fonts/sourcesanspro.otf");
     }
 
     @Override
@@ -57,15 +60,19 @@ public class ArticleArrayAdapter extends RecyclerView.Adapter<ArticleArrayAdapte
 
         TextView tvTitle = viewHolder.tvTitle;
         tvTitle.setText(article.getHeadline());
+        tvTitle.setTypeface(font);
 
         // find the image view
         ImageView imageView = viewHolder.ivImage;
         // clear out recycled image from convertView from last time
         imageView.setImageResource(0);
 
+
         String thumbnail = article.getThumbNail();
         if (!TextUtils.isEmpty(thumbnail)) {
-            Picasso.with(imageView.getContext()).load(thumbnail).into(imageView);
+            Glide.with(imageView.getContext())
+                    .load(thumbnail)
+                    .into(imageView);
         }
     }
 

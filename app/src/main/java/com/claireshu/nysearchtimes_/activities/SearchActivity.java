@@ -8,6 +8,8 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -43,14 +45,31 @@ public class SearchActivity extends AppCompatActivity {
     String sort;
     String beginDate;
 
+    String url;
+    boolean initialLoad = true;
+
+    private final String URL_SEARCH = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
+    private final String URL_TOP = "https://api.nytimes.com/svc/topstories/v2/home.json";
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        // sets the action bar text font to customFont
+        SpannableString s = new SpannableString("NYTimesSearch");
+        com.claireshu.nysearchtimes_.TypefaceSpan typeface = new com.claireshu.nysearchtimes_.TypefaceSpan(this, "sourcesanspro.otf");
+        s.setSpan(typeface, 0, s.length(),
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(s);
+
 
         setUpViews();
+
+        refresh(1, null, null, null, null);
     }
 
     @Override
@@ -104,7 +123,7 @@ public class SearchActivity extends AppCompatActivity {
         adapter = new ArticleArrayAdapter(this, articles);
         rvArticles.setAdapter(adapter);
 
-        gridLayoutManager = new StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL);
+        gridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         rvArticles.setLayoutManager(gridLayoutManager);
 
         ItemClickSupport.addTo(rvArticles).setOnItemClickListener(
@@ -143,18 +162,26 @@ public class SearchActivity extends AppCompatActivity {
         page = num;
         Log.d("PAGENUM", Integer.toString(page));
         AsyncHttpClient client = new AsyncHttpClient();
-        String url = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
+        if (initialLoad) {
+            url = URL_TOP;
+        } else {
+            url = URL_SEARCH;
+        }
+
 
         RequestParams params = new RequestParams();
         params.put("api-key", "7f160c48b3fa45c5bd259583a5ba8502");
-        params.put("page", page);
-        params.put("q", query);
 
-        if (begin_date != null) params.put("begin_date", begin_date);
-        if (sort != null)  params.put("sort", sort);
-        if (news_desk != null) {
-            // params.put("fq", "news_desk:(\"Fashion & Style\")");.
-            params.put("fq", "news_desk:(\"" + news_desk + "\")");
+        if (!initialLoad) {
+            params.put("page", page);
+            params.put("q", query);
+
+            if (begin_date != null) params.put("begin_date", begin_date);
+            if (sort != null) params.put("sort", sort);
+            if (news_desk != null) {
+                // params.put("fq", "news_desk:(\"Fashion & Style\")");.
+                params.put("fq", "news_desk:(\"" + news_desk + "\")");
+            }
         }
 
         client.get(url, params, new JsonHttpResponseHandler() {
@@ -184,6 +211,8 @@ public class SearchActivity extends AppCompatActivity {
                 }
             }
         });
+
+        if (initialLoad) initialLoad = false;
     }
 
 
