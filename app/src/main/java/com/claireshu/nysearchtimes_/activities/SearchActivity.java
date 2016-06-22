@@ -1,6 +1,7 @@
 package com.claireshu.nysearchtimes_.activities;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.claireshu.nysearchtimes_.Article;
 import com.claireshu.nysearchtimes_.ArticleActivity;
@@ -48,6 +50,8 @@ public class SearchActivity extends AppCompatActivity {
     String url;
     boolean initialLoad = true;
 
+    Typeface font;
+
     private final String URL_SEARCH = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
     private final String URL_TOP = "https://api.nytimes.com/svc/topstories/v2/home.json";
 
@@ -57,6 +61,8 @@ public class SearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        font = Typeface.createFromAsset(getAssets(), "fonts/sourcesanspro.otf");
 
         // sets the action bar text font to customFont
         SpannableString s = new SpannableString("NYTimesSearch");
@@ -78,6 +84,8 @@ public class SearchActivity extends AppCompatActivity {
         inflater.inflate(R.menu.menu_search, menu);
         MenuItem searchItem = menu.findItem(R.id.action_search);
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        TextView searchText = (TextView) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+        searchText.setTypeface(font);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
