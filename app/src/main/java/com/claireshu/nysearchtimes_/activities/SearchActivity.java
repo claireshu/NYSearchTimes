@@ -38,6 +38,9 @@ public class SearchActivity extends AppCompatActivity {
     StaggeredGridLayoutManager gridLayoutManager;
 
     int page;
+    String newsDesk;
+    String sort;
+    String beginDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,13 +132,13 @@ public class SearchActivity extends AppCompatActivity {
             public void onLoadMore(int page, int totalItemsCount) {
                 // Triggered only when new data needs to be appended to the list
                 // Add whatever code is needed to append new items to the bottom of the list
-                refresh(page, query);
+                refresh(page, query, beginDate, sort, newsDesk);
             }
         });
 
-        refresh(0, query);
+        refresh(0, query, beginDate, sort, newsDesk);
     }
-    private void refresh(int num, String query) {
+    private void refresh(int num, String query, String begin_date, String sort, String news_desk) {
         page = num;
         Log.d("PAGENUM", Integer.toString(page));
         AsyncHttpClient client = new AsyncHttpClient();
@@ -145,6 +148,13 @@ public class SearchActivity extends AppCompatActivity {
         params.put("api-key", "7f160c48b3fa45c5bd259583a5ba8502");
         params.put("page", page);
         params.put("q", query);
+
+        if (begin_date != null) params.put("begin_date", begin_date);
+        if (sort != null)  params.put("sort", sort);
+        if (news_desk != null) {
+            // params.put("fq", "news_desk:(\"Fashion & Style\")");.
+            params.put("fq", "news_desk:(\"" + news_desk + "\")");
+        }
 
         client.get(url, params, new JsonHttpResponseHandler() {
             @Override
@@ -175,6 +185,7 @@ public class SearchActivity extends AppCompatActivity {
         });
     }
 
+
     private final int REQUEST_CODE = 20;
 
     public void onFilter(MenuItem item) {
@@ -185,10 +196,9 @@ public class SearchActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
-            String newsDesk= data.getStringExtra("news_desk");
-            String sort = data.getStringExtra("sort");
-            String date = data.getStringExtra("date");
-
+            newsDesk = data.getStringExtra("news_desk");
+            sort = data.getStringExtra("sort");
+            beginDate = data.getStringExtra("date");
 
         } else {
             // error handling

@@ -20,19 +20,14 @@ public class FilterActivity extends AppCompatActivity {
     public void returnFilters(View view) {
         Intent intent = new Intent(FilterActivity.this, SearchActivity.class);
         DatePicker datePicker = (DatePicker) findViewById(R.id.datePicker);
+
         String year = Integer.toString(datePicker.getYear());
         String month = Integer.toString(datePicker.getMonth());
         String day = Integer.toString(datePicker.getDayOfMonth());
         if (month.length() < 2) month = "0" + month;
         if (day.length() < 2) day = "0" + day;
-        String dateFormatted = "year" + "month" + "day";
-
+        String dateFormatted = year + month + day;
         intent.putExtra("date", dateFormatted);
-
-                //YYYYMMDD
-//        intent.putExtra("year", year);
-//        intent.putExtra("month", month);
-//        intent.putExtra("day", day);
 
         Spinner spNewsSpinner = (Spinner) findViewById(R.id.spinner_news_desk);
         Spinner spSortSpinner = (Spinner) findViewById(R.id.spinner_sort);
@@ -40,6 +35,7 @@ public class FilterActivity extends AppCompatActivity {
         String sort = spSortSpinner.getSelectedItem().toString();
         intent.putExtra("news_desk", newsDesk);
         intent.putExtra("sort", sort);
+
         setResult(RESULT_OK, intent);
         finish();
     }
