@@ -4,6 +4,7 @@
     <string name="search_query">Enter search query</string>
     <string name="search">Search</string>
     <string name="title_activity_article">ArticleActivity</string>
+    <string name="finished">Finished</string>
 
     <string-array name="news_desk_arrays">
         <item>Science</item>

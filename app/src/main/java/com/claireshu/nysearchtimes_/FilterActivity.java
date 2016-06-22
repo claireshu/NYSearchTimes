@@ -9,6 +9,9 @@ import android.widget.Spinner;
 
 import com.claireshu.nysearchtimes_.activities.SearchActivity;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 public class FilterActivity extends AppCompatActivity {
 
     @Override
@@ -19,15 +22,19 @@ public class FilterActivity extends AppCompatActivity {
 
     public void returnFilters(View view) {
         Intent intent = new Intent(FilterActivity.this, SearchActivity.class);
-        DatePicker datePicker = (DatePicker) findViewById(R.id.datePicker);
 
-        String year = Integer.toString(datePicker.getYear());
-        String month = Integer.toString(datePicker.getMonth());
-        String day = Integer.toString(datePicker.getDayOfMonth());
-        if (month.length() < 2) month = "0" + month;
-        if (day.length() < 2) day = "0" + day;
-        String dateFormatted = year + month + day;
-        intent.putExtra("date", dateFormatted);
+        DatePicker datePicker = (DatePicker) findViewById(R.id.datePicker);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+
+        int day = datePicker.getDayOfMonth();
+        int month = datePicker.getMonth();
+        int year =  datePicker.getYear();
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, month, day);
+        String date = dateFormat.format(calendar.getTime());
+
+        intent.putExtra("date", date);
 
         Spinner spNewsSpinner = (Spinner) findViewById(R.id.spinner_news_desk);
         Spinner spSortSpinner = (Spinner) findViewById(R.id.spinner_sort);

@@ -26,6 +26,7 @@ import com.loopj.android.http.RequestParams;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 
@@ -111,13 +112,13 @@ public class SearchActivity extends AppCompatActivity {
                     @Override
                     public void onItemClicked(RecyclerView recyclerView, int position, View v) {
                         //create an intent to display the article
-                        Intent i = new Intent(getApplicationContext(), ArticleActivity.class);
+                        Intent intent = new Intent(getApplicationContext(), ArticleActivity.class);
                         // get the article to display
                         Article article = articles.get(position);
                         // pass in that article into intent
-                        i.putExtra("article", article);
+                        intent.putExtra("article", Parcels.wrap(article));
                         // launch the activity
-                        startActivity(i);
+                        startActivity(intent);
                     }
                 }
         );
