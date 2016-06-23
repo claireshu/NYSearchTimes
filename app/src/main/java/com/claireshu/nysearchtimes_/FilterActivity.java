@@ -25,8 +25,10 @@ import java.util.Calendar;
 
 public class FilterActivity extends AppCompatActivity {
     Typeface font;
-    ArrayAdapter spinnerAdapter;
+    ArrayAdapter spinnerNewsDeskAdapter;
     Spinner spNewsSpinner;
+    Spinner spSortSpinner;
+    ArrayAdapter spinnerSortAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,23 +51,14 @@ public class FilterActivity extends AppCompatActivity {
         btFilter.setTypeface(font);
 
         spNewsSpinner = (Spinner) findViewById(R.id.spinner_news_desk);
-//        SpinnerArrayAdapter mySpinnerArrayAdapter = new SpinnerArrayAdapter(this, R.layout.spinner_style);
-//        mySpinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_style);
-//        mySpinnerArrayAdapter.addAll(Arrays.asList(getResources().getStringArray(
-//                R.array.news_desk_arrays)));
-//        spNewsSpinner.setAdapter(mySpinnerArrayAdapter);
 //
-//        spinnerAdapter = ArrayAdapter.createFromResource(this,
-//                R.array.news_desk_arrays, R.layout.spinner_style);
-//        spinnerAdapter.addAll(Arrays.asList(getResources().getStringArray(
-//                R.array.news_desk_arrays)));
 
         ArrayList<String> newsDeskValues = new ArrayList<>();
         newsDeskValues.add("Science");
         newsDeskValues.add("Sports");
         newsDeskValues.add("Movies");
 
-        spinnerAdapter = new ArrayAdapter(this, R.layout.spinner_style, newsDeskValues){
+        spinnerNewsDeskAdapter = new ArrayAdapter(this, R.layout.spinner_style, newsDeskValues){
             public View getView(int position, View convertView, ViewGroup parent)
             {
                 View v = super.getView(position, convertView, parent);
@@ -82,15 +75,16 @@ public class FilterActivity extends AppCompatActivity {
             }
 
         };
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spNewsSpinner.setAdapter(spinnerAdapter);
+        spinnerNewsDeskAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spNewsSpinner.setAdapter(spinnerNewsDeskAdapter);
 
-        ArrayList<String> newsDeskValues = new ArrayList<>();
-        newsDeskValues.add("Science");
-        newsDeskValues.add("Sports");
-        newsDeskValues.add("Movies");
+        spSortSpinner = (Spinner) findViewById(R.id.spinner_sort);
 
-        spinnerAdapter = new ArrayAdapter(this, R.layout.spinner_style, newsDeskValues){
+        ArrayList<String> sortValues = new ArrayList<>();
+        sortValues.add("Newest");
+        sortValues.add("Oldest");
+
+        spinnerSortAdapter = new ArrayAdapter(this, R.layout.spinner_style, sortValues){
             public View getView(int position, View convertView, ViewGroup parent)
             {
                 View v = super.getView(position, convertView, parent);
@@ -107,8 +101,8 @@ public class FilterActivity extends AppCompatActivity {
             }
 
         };
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spNewsSpinner.setAdapter(spinnerAdapter);
+        spinnerSortAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spSortSpinner.setAdapter(spinnerSortAdapter);
     }
 
     public void returnFilters(View view) {
