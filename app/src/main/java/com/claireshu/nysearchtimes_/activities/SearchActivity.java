@@ -75,7 +75,7 @@ public class SearchActivity extends AppCompatActivity {
 
         setUpViews();
 
-        refresh(1, null, null, null, null);
+        refresh(0, null, null, null, null);
     }
 
     @Override
@@ -89,6 +89,7 @@ public class SearchActivity extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                initialLoad = false;
                 // perform query here
                 search(query);
 
@@ -199,11 +200,15 @@ public class SearchActivity extends AppCompatActivity {
                 JSONArray articleJsonResults = null;
 
                 try {
-                    articleJsonResults = response.getJSONObject("response").getJSONArray("docs");
+                    if (initialLoad) {
+                        articleJsonResults = response.getJSONArray("results");
+                    } else {
+                        articleJsonResults = response.getJSONObject("response").getJSONArray("docs");
+                    }
 
                     //int curSize = adapter.getItemCount();
 
-                    ArrayList<Article> newArticles = Article.fromJSONArray(articleJsonResults);
+                    ArrayList<Article> newArticles = Article.fromJSONArray(articleJsonResults, initialLoad);
 
                     if (page == 0) {
                         articles.clear();
@@ -215,12 +220,10 @@ public class SearchActivity extends AppCompatActivity {
 
                     Log.d("DEBUG", articles.toString());
                 } catch (JSONException e){
-
+                    e.printStackTrace();
                 }
             }
         });
-
-        if (initialLoad) initialLoad = false;
     }
 
 
