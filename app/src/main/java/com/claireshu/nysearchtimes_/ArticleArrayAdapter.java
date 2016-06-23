@@ -14,6 +14,9 @@ import com.bumptech.glide.Glide;
 
 import java.util.List;
 
+import jp.wasabeef.glide.transformations.GrayscaleTransformation;
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+
 /**
  * Created by claireshu on 6/20/16.
  */
@@ -72,6 +75,7 @@ public class ArticleArrayAdapter extends RecyclerView.Adapter<ArticleArrayAdapte
         if (!TextUtils.isEmpty(thumbnail)) {
             Glide.with(imageView.getContext())
                     .load(thumbnail)
+                    .bitmapTransform(new GrayscaleTransformation(imageView.getContext()), new RoundedCornersTransformation(imageView.getContext(), 4, 4))
                     .into(imageView);
         }
     }

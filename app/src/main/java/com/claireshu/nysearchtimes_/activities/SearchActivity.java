@@ -1,6 +1,7 @@
 package com.claireshu.nysearchtimes_.activities;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
@@ -16,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.claireshu.nysearchtimes_.Article;
@@ -52,6 +54,7 @@ public class SearchActivity extends AppCompatActivity {
 
     Typeface font;
 
+
     private final String URL_SEARCH = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
     private final String URL_TOP = "https://api.nytimes.com/svc/topstories/v2/home.json";
 
@@ -61,6 +64,11 @@ public class SearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        getWindow().setStatusBarColor(Color.parseColor("#b9d3b0"));
+        getWindow().setNavigationBarColor(Color.parseColor("#81BDA4"));
+
 
         font = Typeface.createFromAsset(getAssets(), "fonts/sourcesanspro.otf");
 
