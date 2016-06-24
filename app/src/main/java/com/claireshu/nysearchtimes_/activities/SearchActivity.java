@@ -54,35 +54,21 @@ public class SearchActivity extends AppCompatActivity {
 
     Typeface font;
 
-
     private final String URL_SEARCH = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
     private final String URL_TOP = "https://api.nytimes.com/svc/topstories/v2/home.json";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-
-        this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        getWindow().setStatusBarColor(Color.parseColor("#b9d3b0"));
-        getWindow().setNavigationBarColor(Color.parseColor("#81BDA4"));
-
 
         font = Typeface.createFromAsset(getAssets(), "fonts/sourcesanspro.otf");
 
-        // sets the action bar text font to customFont
-        SpannableString s = new SpannableString("NYTimesSearch");
-        com.claireshu.nysearchtimes_.TypefaceSpan typeface = new com.claireshu.nysearchtimes_.TypefaceSpan(this, "sourcesanspro.otf");
-        s.setSpan(typeface, 0, s.length(),
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(s);
-
-
+        setStatusBarColor();
+        setActionBarFont();
         setUpViews();
 
+        // displays top stories
         refresh(0, null, null, null, null);
     }
 
@@ -179,16 +165,17 @@ public class SearchActivity extends AppCompatActivity {
         page = num;
         Log.d("PAGENUM", Integer.toString(page));
         AsyncHttpClient client = new AsyncHttpClient();
+
         if (initialLoad) {
             url = URL_TOP;
         } else {
             url = URL_SEARCH;
         }
 
-
         RequestParams params = new RequestParams();
         params.put("api-key", "7f160c48b3fa45c5bd259583a5ba8502");
 
+        // parameters put only for regular article search
         if (!initialLoad) {
             params.put("page", page);
             params.put("q", query);
@@ -196,7 +183,6 @@ public class SearchActivity extends AppCompatActivity {
             if (begin_date != null) params.put("begin_date", begin_date);
             if (sort != null) params.put("sort", sort);
             if (news_desk != null) {
-                // params.put("fq", "news_desk:(\"Fashion & Style\")");.
                 params.put("fq", "news_desk:(\"" + news_desk + "\")");
             }
         }
@@ -208,6 +194,7 @@ public class SearchActivity extends AppCompatActivity {
                 JSONArray articleJsonResults = null;
 
                 try {
+                    // different API calls based on whether top stories or article search is being used
                     if (initialLoad) {
                         articleJsonResults = response.getJSONArray("results");
                     } else {
@@ -216,7 +203,7 @@ public class SearchActivity extends AppCompatActivity {
 
                     ArrayList<Article> newArticles = Article.fromJSONArray(articleJsonResults, initialLoad);
 
-                    if (page == 0) {
+                    if (page == 0) { // clears every time a new query is searched
                         articles.clear();
                     }
 
@@ -236,6 +223,11 @@ public class SearchActivity extends AppCompatActivity {
 
     public void onFilter(MenuItem item) {
         Intent intent = new Intent(SearchActivity.this, FilterActivity.class);
+        if (newsDesk != null && sort != null && beginDate != null) {
+            intent.putExtra("news_desk", newsDesk);
+            intent.putExtra("sort", sort);
+            intent.putExtra("date", beginDate);
+        }
         startActivityForResult(intent, REQUEST_CODE);
     }
 
@@ -245,9 +237,26 @@ public class SearchActivity extends AppCompatActivity {
             newsDesk = data.getStringExtra("news_desk");
             sort = data.getStringExtra("sort");
             beginDate = data.getStringExtra("date");
-
         } else {
             // error handling
         }
+    }
+
+    private void setStatusBarColor() {
+        this.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        getWindow().setStatusBarColor(Color.parseColor("#b9d3b0"));
+        getWindow().setNavigationBarColor(Color.parseColor("#81BDA4"));
+    }
+
+    private void setActionBarFont() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        // sets the action bar text font to customFont
+        SpannableString s = new SpannableString("NYTimesSearch");
+        com.claireshu.nysearchtimes_.TypefaceSpan typeface = new com.claireshu.nysearchtimes_.TypefaceSpan(this, "sourcesanspro.otf");
+        s.setSpan(typeface, 0, s.length(),
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(s);
+
     }
 }

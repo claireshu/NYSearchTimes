@@ -9,7 +9,6 @@ import android.graphics.Typeface;
 public class StaticUtils {
     public static Typeface sTypeFace(Context context) {
         Typeface font = Typeface.createFromAsset(context.getAssets(), "fonts/sourcesanspro.otf");
-
         return font;
     }
 }
