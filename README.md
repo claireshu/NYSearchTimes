@@ -39,6 +39,7 @@ The following **additional** features are implemented:
 * [x] Custom font for main activity text, Toolbar, and Spinners (custom spinner) 
 * [x] Image transformations using Glide transformations (https://github.com/wasabeef/glide-transformations) 
 * [x] Theme customized (button, navigation bar, status bar, searchview font, spinner arrow, etc.) 
+* [x] Launcher icon changed 
 
 ## Video Walkthrough
 
