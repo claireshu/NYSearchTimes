@@ -214,8 +214,6 @@ public class SearchActivity extends AppCompatActivity {
                         articleJsonResults = response.getJSONObject("response").getJSONArray("docs");
                     }
 
-                    //int curSize = adapter.getItemCount();
-
                     ArrayList<Article> newArticles = Article.fromJSONArray(articleJsonResults, initialLoad);
 
                     if (page == 0) {
@@ -224,7 +222,6 @@ public class SearchActivity extends AppCompatActivity {
 
                     articles.addAll(newArticles);
                     adapter.notifyDataSetChanged();
-                    //adapter.notifyItemRangeInserted(0, articles.size() - 1);
 
                     Log.d("DEBUG", articles.toString());
                 } catch (JSONException e){

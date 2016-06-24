@@ -1,25 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--<Spinner xmlns:android="http://schemas.android.com/apk/res/android"-->
-    <!--android:orientation="vertical"-->
-
-    <!--android:layout_width="fill_parent"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:textSize="9pt"-->
-    <!--android:singleLine="true"-->
-    <!--android:id="@+id/spinnerTarget"-->
-    <!--android:textColor="#000000"-->
-    <!--android:gravity="center">-->
-    <!--<TextView-->
-        <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:textSize="20sp"-->
-        <!--android:gravity="left"-->
-        <!--android:textColor="#FF0000"-->
-        <!--android:padding="5dip"-->
-        <!--/>-->
-
-<!--</Spinner>-->
 
 <TextView
     xmlns:android="http://schemas.android.com/apk/res/android"
